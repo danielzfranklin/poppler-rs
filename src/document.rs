@@ -1,6 +1,6 @@
 use crate::util;
 use crate::PopplerPage;
-use poppler_sys::{poppler as sys, poppler_document as sys_doc};
+use poppler_sys::{document as sys_doc, poppler as sys};
 use std::ffi::CString;
 use std::os::raw::{c_char, c_int};
 use std::path;
@@ -31,7 +31,7 @@ impl PopplerDocument {
         data: &mut [u8],
         password: &str,
     ) -> Result<PopplerDocument, glib::error::Error> {
-        if data.len() == 0 {
+        if data.is_empty() {
             return Err(glib::error::Error::new(
                 glib::FileError::Inval,
                 "data is empty",
@@ -44,13 +44,11 @@ impl PopplerDocument {
             )
         })?;
 
+        let data_char = data.as_mut_ptr() as *mut c_char;
+        let data_len = data.len() as c_int;
+
         let doc = util::call_with_gerror(|err_ptr| unsafe {
-            sys_doc::poppler_document_new_from_data(
-                data.as_mut_ptr() as *mut c_char,
-                data.len() as c_int,
-                pw.as_ptr(),
-                err_ptr,
-            )
+            sys_doc::poppler_document_new_from_data(data_char, data_len, pw.as_ptr(), err_ptr)
         })?;
 
         Ok(PopplerDocument(doc))
@@ -85,14 +83,14 @@ impl PopplerDocument {
             }
         }
     }
-    pub fn get_permissions(&self) -> u8 {
-        unsafe { sys_doc::poppler_document_get_permissions(self.0) as u8 }
+    pub fn get_permissions(&self) -> sys_doc::PopplerPermissions {
+        unsafe { sys_doc::poppler_document_get_permissions(self.0) }
     }
 
-    pub fn get_n_pages(&self) -> usize {
+    pub fn get_n_pages(&self) -> c_int {
         // FIXME: what's the correct type here? can we assume a document
         //        has a positive number of pages?
-        (unsafe { sys_doc::poppler_document_get_n_pages(self.0) }) as usize
+        unsafe { sys_doc::poppler_document_get_n_pages(self.0) }
     }
 
     pub fn get_page(&self, index: usize) -> Option<PopplerPage> {

@@ -5,9 +5,9 @@ Low level bindings to [poppler](https://gitlab.freedesktop.org/poppler/poppler).
 ## Vendored Binding
 
 The vendored bindings were generated on a system which had headers from:
-- poppler-glib 0.76.1
-- glib-2.0 2.60.4
-- cairo 1.16.0
+- poppler-glib 0.87.0-1
+- glib-2.0 2.64.2-1
+- cairo 1.17.2+17+g52a7c79fd-2
 
 Please continue reading if you intend to generate your own bindings and ignore the vendored ones.
 
@@ -21,8 +21,8 @@ $ cargo doc --no-deps --open --package poppler-sys
 ## Features
 
 - `generate-bindings`
-    If unset (default), the bindings from `build/vendored_bindings` will be copied to `OUTPUT_DIR` and be used as actual bindings.  
-    If set, new bindings will be generated into `OUTPUT_DIR` and they will be used as actual bindings. Also, they will be copied into `build/vendored_bindings` (replacing the vendored bindings).
+    If unset (default), the bindings from `src/vendored_bindings` will be used.  
+    if set, new bindings will be generated into `OUTPUT_DIR` and they will be used as actual bindings. Also, they will be copied into (overwriting) `src/vendored_bindings`.
 - `glib-api` (implicit, TODO)
 - `qt5-api` (TODO)
 - `cpp-api` (TODO)
@@ -46,3 +46,5 @@ Build-depends on:
 - `poppler-glib` (and it's depedencies)
     - `cairo`
     - `glib-2.0`
+
+After the new bindings have been generated, you should run the tests on both the `poppler` and `poppler-sys` packages, and also format the files on `poppler-sys/src/vendored_bindings/` (I use `rustfmt *<TAB>` to format all the files).

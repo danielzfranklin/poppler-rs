@@ -1,4 +1,4 @@
-use poppler_sys::{poppler as sys, poppler_page as sys_pg};
+use poppler_sys::{page as sys_pg, poppler as sys};
 use std::ffi::CStr;
 use std::os::raw::c_double;
 
@@ -14,23 +14,22 @@ impl PopplerPage {
         let mut width: f64 = 0.0;
         let mut height: f64 = 0.0;
 
-        unsafe {
-            sys_pg::poppler_page_get_size(
-                self.0,
-                &mut width as *mut f64 as *mut c_double,
-                &mut height as *mut f64 as *mut c_double,
-            )
+        {
+            let width = (&mut width as *mut f64) as *mut c_double;
+            let height = (&mut height as *mut f64) as *mut c_double;
+
+            unsafe { sys_pg::poppler_page_get_size(self.0, width, height) }
         }
 
         (width, height)
     }
 
-    pub fn render(&self, ctx: &cairo::Context) {
+    pub fn render(&self, ctx: &mut cairo::Context) {
         let ctx_raw = ctx.to_raw_none();
         unsafe { sys_pg::poppler_page_render(self.0, ctx_raw) }
     }
 
-    pub fn render_for_printing(&self, ctx: &cairo::Context) {
+    pub fn render_for_printing(&self, ctx: &mut cairo::Context) {
         let ctx_raw = ctx.to_raw_none();
         unsafe { sys_pg::poppler_page_render_for_printing(self.0, ctx_raw) }
     }
