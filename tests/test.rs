@@ -15,18 +15,18 @@ fn test1() {
 
     println!("Document has {} page(s)", num_pages);
 
-    let mut surface = PdfSurface::new(420.0, 595.0, "tests/output.pdf").unwrap();
-    let ctx = Context::new(&mut surface);
+    let surface = PdfSurface::new(420.0, 595.0, "tests/output.pdf").unwrap();
+    let mut ctx = Context::new(&surface);
 
     // FIXME: move iterator to poppler
     for page_num in 0..num_pages {
-        let page = doc.get_page(page_num).unwrap();
+        let page = doc.get_page(page_num as usize).unwrap();
         let (w, h) = page.get_size();
         println!("page {} has size {}, {}", page_num, w, h);
-        surface.set_size(w, h);
+        surface.set_size(w, h).unwrap();
 
         ctx.save();
-        page.render(&ctx);
+        page.render(&mut ctx);
 
         println!("Text: {:?}", page.get_text().unwrap_or(""));
 
@@ -61,15 +61,18 @@ fn test2_from_file() {
 
     assert!(metadata.is_some());
     assert_eq!(version_string, Some("PDF-1.3".to_string()));
-    assert_eq!(permissions, 0xff);
+    assert_eq!(
+        permissions,
+        poppler_sys::document::PopplerPermissions::POPPLER_PERMISSIONS_FULL
+    );
 
     assert_eq!(title, "This is a test PDF file");
 
-    let mut surface = ImageSurface::create(Format::ARgb32, w as i32, h as i32).unwrap();
-    let ctx = Context::new(&mut surface);
+    let surface = ImageSurface::create(Format::ARgb32, w as i32, h as i32).unwrap();
+    let mut ctx = Context::new(&surface);
 
     ctx.save();
-    page.render(&ctx);
+    page.render(&mut ctx);
     ctx.restore();
     ctx.show_page();
 
@@ -102,7 +105,10 @@ fn test2_from_data() {
 
     assert!(metadata.is_some());
     assert_eq!(version_string, Some("PDF-1.3".to_string()));
-    assert_eq!(permissions, 0xff);
+    assert_eq!(
+        permissions,
+        poppler_sys::document::PopplerPermissions::POPPLER_PERMISSIONS_FULL
+    );
 }
 
 #[test]

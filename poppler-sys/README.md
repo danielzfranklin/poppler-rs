@@ -21,8 +21,8 @@ $ cargo doc --no-deps --open --package poppler-sys
 ## Features
 
 - `generate-bindings`
-    If unset (default), the bindings from `build/vendored_bindings` will be copied to `OUTPUT_DIR` and be used as actual bindings.  
-    If set, new bindings will be generated into `OUTPUT_DIR` and they will be used as actual bindings. Also, they will be copied into `build/vendored_bindings` (replacing the vendored bindings).
+    If unset (default), the bindings from `src/vendored_bindings` will be used.  
+    if set, new bindings will be generated into `OUTPUT_DIR` and they will be used as actual bindings. Also, they will be copied into (overwriting) `src/vendored_bindings`.
 - `glib-api` (implicit, TODO)
 - `qt5-api` (TODO)
 - `cpp-api` (TODO)
@@ -47,4 +47,4 @@ Build-depends on:
     - `cairo`
     - `glib-2.0`
 
-After the new bindings have been generated, you should run the tests on both the `poppler` and `poppler-sys` packages, and also format the files on `poppler-sys/build/vendored_bindings/` (I use `rustfmt *<TAB>` to format all the files).
+After the new bindings have been generated, you should run the tests on both the `poppler` and `poppler-sys` packages, and also format the files on `poppler-sys/src/vendored_bindings/` (I use `rustfmt *<TAB>` to format all the files).

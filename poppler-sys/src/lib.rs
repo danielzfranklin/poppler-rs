@@ -4,6 +4,9 @@
     non_snake_case,
     improper_ctypes
 )]
+
+pub(crate) mod vendored_bindings;
+
 #[warn(
     non_upper_case_globals,
     non_camel_case_types,
@@ -25,78 +28,24 @@ mod dep_types {
 }
 
 pub mod poppler {
-    use super::dep_types::*;
-    use super::poppler_action::{_PopplerAction, _PopplerActionLayer, _PopplerDest};
-    use super::poppler_annot::_PopplerAnnotCalloutLine;
-    use super::poppler_attachment::_PopplerAttachment;
-    use super::poppler_movie::_PopplerMovie;
-    use super::poppler_page::{
+    pub(crate) use super::action::{_PopplerAction, _PopplerActionLayer, _PopplerDest};
+    pub(crate) use super::annot::_PopplerAnnotCalloutLine;
+    pub(crate) use super::attachment::_PopplerAttachment;
+    pub(crate) use super::movie::_PopplerMovie;
+    pub(crate) use super::page::{
         _PopplerAnnotMapping, _PopplerColor, _PopplerFormFieldMapping, _PopplerImageMapping,
         _PopplerLinkMapping, _PopplerPageTransition, _PopplerPoint, _PopplerQuadrilateral,
         _PopplerRectangle, _PopplerTextAttributes,
     };
-    include!(concat!(env!("OUT_DIR"), "/bindings_poppler.rs"));
+    pub use crate::vendored_bindings::bindings_poppler::*;
 }
 
-pub mod poppler_document {
-    use super::dep_types::*;
-    use super::poppler::*;
-
-    include!(concat!(env!("OUT_DIR"), "/bindings_poppler_document.rs"));
-}
-
-pub mod poppler_page {
-    use super::dep_types::*;
-    use super::poppler::*;
-
-    include!(concat!(env!("OUT_DIR"), "/bindings_poppler_page.rs"));
-}
-
-pub mod poppler_action {
-    use super::dep_types::*;
-    use super::poppler::*;
-
-    include!(concat!(env!("OUT_DIR"), "/bindings_poppler_action.rs"));
-}
-
-pub mod poppler_annot {
-    use super::dep_types::*;
-    use super::poppler::*;
-
-    include!(concat!(env!("OUT_DIR"), "/bindings_poppler_annot.rs"));
-}
-
-pub mod poppler_attachment {
-    use super::dep_types::*;
-    use super::poppler::*;
-
-    include!(concat!(env!("OUT_DIR"), "/bindings_poppler_attachment.rs"));
-}
-
-pub mod poppler_form_field {
-    use super::dep_types::*;
-    use super::poppler::*;
-
-    include!(concat!(env!("OUT_DIR"), "/bindings_poppler_form_field.rs"));
-}
-
-pub mod poppler_layer {
-    use super::dep_types::*;
-    use super::poppler::*;
-
-    include!(concat!(env!("OUT_DIR"), "/bindings_poppler_layer.rs"));
-}
-
-pub mod poppler_media {
-    use super::dep_types::*;
-    use super::poppler::*;
-
-    include!(concat!(env!("OUT_DIR"), "/bindings_poppler_media.rs"));
-}
-
-pub mod poppler_movie {
-    use super::dep_types::*;
-    use super::poppler::*;
-
-    include!(concat!(env!("OUT_DIR"), "/bindings_poppler_movie.rs"));
-}
+pub use vendored_bindings::bindings_poppler_action as action;
+pub use vendored_bindings::bindings_poppler_annot as annot;
+pub use vendored_bindings::bindings_poppler_attachment as attachment;
+pub use vendored_bindings::bindings_poppler_document as document;
+pub use vendored_bindings::bindings_poppler_form_field as form_field;
+pub use vendored_bindings::bindings_poppler_layer as layer;
+pub use vendored_bindings::bindings_poppler_media as media;
+pub use vendored_bindings::bindings_poppler_movie as movie;
+pub use vendored_bindings::bindings_poppler_page as page;

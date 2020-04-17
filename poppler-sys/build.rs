@@ -3,17 +3,17 @@ extern crate strum_macros;
 #[macro_use]
 extern crate lazy_static;
 
+#[cfg(feature = "generate-bindings")]
 extern crate bindgen;
+
 extern crate pkg_config;
-extern crate semver;
 extern crate strum;
 
 use std::collections::HashMap;
-use std::env;
-use std::path::PathBuf;
 
-const POPPLER_GLIB_VERSION: &'static str = "0.87.0";
-const BINDINGS_VENDOR_DIR: &'static str = "build/vendored_bindings";
+pub const POPPLER_GLIB_VERSION: &str = "0.87.0";
+#[cfg(feature = "generate-bindings")]
+const BINDINGS_VENDOR_DIR: &str = "src/vendored_bindings";
 
 #[derive(Hash, Eq, PartialEq, Clone, Display)]
 #[strum(serialize_all = "snake_case")]
@@ -57,30 +57,6 @@ fn main() {
     // this println ensures a lazy_static execution
     // that will setup the linking
     println!("{:?}", POPPLER_LIBRARY.libs);
-
-    copy_from_vendored(Modules::Poppler);
-    copy_from_vendored(Modules::PopplerDocument);
-    copy_from_vendored(Modules::PopplerPage);
-    copy_from_vendored(Modules::PopplerAction);
-    copy_from_vendored(Modules::PopplerAnnot);
-    copy_from_vendored(Modules::PopplerAttachment);
-    copy_from_vendored(Modules::PopplerFormField);
-    copy_from_vendored(Modules::PopplerLayer);
-    copy_from_vendored(Modules::PopplerMedia);
-    copy_from_vendored(Modules::PopplerMovie);
-}
-
-#[cfg(not(feature = "generate-bindings"))]
-fn copy_from_vendored(module: Modules) {
-    let file_name = format!("bindings_{}.rs", module);
-
-    let out_dir = env::var("OUT_DIR").expect("Missing OUT_DIR env var");
-    let out_path = PathBuf::from(&out_dir).join(&file_name);
-
-    let vend_dir = BINDINGS_VENDOR_DIR;
-    let vend_path = PathBuf::from(&vend_dir).join(file_name);
-
-    std::fs::copy(&vend_path, &out_path).expect(&format!("Failed to copy from {:?} into {:?}. Perhaps you deleted the poppler-sys/build/vendored_bindings/ files and thus need to regenerate them? You might want to try re-building with --features=\"generate-bindings\" ", vend_path, out_path));
 }
 
 #[cfg(feature = "generate-bindings")]
@@ -110,13 +86,22 @@ fn builder() -> bindgen::Builder {
         .whitelist_function("poppler_.*")
         .whitelist_var("_?Poppler.*")
         .whitelist_var("_?poppler.*")
+        //
         .disable_name_namespacing()
+        .generate_comments(true)
+        .default_enum_style(bindgen::EnumVariation::Rust {
+            non_exhaustive: true,
+        })
+        //
+        .raw_line("use crate::dep_types::*;")
+        .raw_line("use crate::poppler::*;")
 }
 
 #[cfg(feature = "generate-bindings")]
 /// Prevent re-defition of some types, generates and writes.
 fn gen(mut builder: bindgen::Builder, module: Modules) {
     // enable/disable (re)definition of some types/functions
+    use std::path::PathBuf;
 
     // types
     let (white_types, black_types): (Vec<(&Modules, &Vec<&str>)>, Vec<(&Modules, &Vec<&str>)>) =
@@ -149,7 +134,7 @@ fn gen(mut builder: bindgen::Builder, module: Modules) {
     let file_name = format!("bindings_{}.rs", module);
 
     // writing of the bindings into OUT_DIR
-    let out_dir = env::var("OUT_DIR").expect("Missing OUT_DIR env var");
+    let out_dir = std::env::var("OUT_DIR").expect("Missing OUT_DIR env var");
     let out_path = PathBuf::from(&out_dir).join(&file_name);
     binding
         .write_to_file(out_path)
@@ -180,39 +165,39 @@ lazy_static! {
         );
         m.insert(
             Modules::PopplerDocument,
-            WHITELIST_POPPLER_DOCUMENT.iter().cloned().collect(),
+            WHITELIST_POPPLER_DOCUMENT.to_vec(),
         );
         m.insert(
             Modules::PopplerPage,
-            WHITELIST_POPPLER_PAGE.iter().cloned().collect(),
+            WHITELIST_POPPLER_PAGE.to_vec(),
         );
         m.insert(
             Modules::PopplerAction,
-            WHITELIST_POPPLER_ACTION.iter().cloned().collect(),
+            WHITELIST_POPPLER_ACTION.to_vec(),
         );
         m.insert(
             Modules::PopplerAnnot,
-            WHITELIST_POPPLER_ANNOT.iter().cloned().collect(),
+            WHITELIST_POPPLER_ANNOT.to_vec(),
         );
         m.insert(
             Modules::PopplerAttachment,
-            WHITELIST_POPPLER_ATTACHMENT.iter().cloned().collect(),
+            WHITELIST_POPPLER_ATTACHMENT.to_vec(),
         );
         m.insert(
             Modules::PopplerFormField,
-            WHITELIST_POPPLER_FORM_FIELD.iter().cloned().collect(),
+            WHITELIST_POPPLER_FORM_FIELD.to_vec(),
         );
         m.insert(
             Modules::PopplerLayer,
-            WHITELIST_POPPLER_LAYER.iter().cloned().collect(),
+            WHITELIST_POPPLER_LAYER.to_vec(),
         );
         m.insert(
             Modules::PopplerMedia,
-            WHITELIST_POPPLER_MEDIA.iter().cloned().collect(),
+            WHITELIST_POPPLER_MEDIA.to_vec(),
         );
         m.insert(
             Modules::PopplerMovie,
-            WHITELIST_POPPLER_MOVIE.iter().cloned().collect(),
+            WHITELIST_POPPLER_MOVIE.to_vec(),
         );
         m
     };
@@ -220,7 +205,7 @@ lazy_static! {
         let mut m = HashMap::new();
         m.insert(
             Modules::Poppler,
-            WHITELIST_FUNC_POPPLER.iter().cloned().collect(),
+            WHITELIST_FUNC_POPPLER.to_vec(),
         );
         m
     };
