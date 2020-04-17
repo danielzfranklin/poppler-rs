@@ -439,6 +439,7 @@ extern "C" {
     pub fn poppler_ps_file_free(ps_file: *mut PopplerPSFile);
 }
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct _PopplerPageRange {
     pub start_page: gint,
     pub end_page: gint,

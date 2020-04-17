@@ -11,6 +11,7 @@ keywords = ["poppler"]
 categories = ["external-ffi-bindings"]
 build = "build.rs"
 links = "poppler-glib"
+edition = "2018"
 
 [dependencies]
 cairo-rs = { version= "0.8.1", features = ["png", "pdf"]}

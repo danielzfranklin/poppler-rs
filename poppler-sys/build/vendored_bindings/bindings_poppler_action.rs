@@ -2,20 +2,21 @@
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub struct __BindgenBitfieldUnit<Storage, Align> {
+pub struct __BindgenBitfieldUnit<Storage, Align>
+where
+    Storage: AsRef<[u8]> + AsMut<[u8]>,
+{
     storage: Storage,
     align: [Align; 0],
-}
-impl<Storage, Align> __BindgenBitfieldUnit<Storage, Align> {
-    #[inline]
-    pub const fn new(storage: Storage) -> Self {
-        Self { storage, align: [] }
-    }
 }
 impl<Storage, Align> __BindgenBitfieldUnit<Storage, Align>
 where
     Storage: AsRef<[u8]> + AsMut<[u8]>,
 {
+    #[inline]
+    pub fn new(storage: Storage) -> Self {
+        Self { storage, align: [] }
+    }
     #[inline]
     pub fn get_bit(&self, index: usize) -> bool {
         debug_assert!(index / 8 < self.storage.as_ref().len());
@@ -81,56 +82,7 @@ where
         }
     }
 }
-#[repr(C)]
-pub struct __BindgenUnionField<T>(::std::marker::PhantomData<T>);
-impl<T> __BindgenUnionField<T> {
-    #[inline]
-    pub const fn new() -> Self {
-        __BindgenUnionField(::std::marker::PhantomData)
-    }
-    #[inline]
-    pub unsafe fn as_ref(&self) -> &T {
-        ::std::mem::transmute(self)
-    }
-    #[inline]
-    pub unsafe fn as_mut(&mut self) -> &mut T {
-        ::std::mem::transmute(self)
-    }
-}
-impl<T> ::std::default::Default for __BindgenUnionField<T> {
-    #[inline]
-    fn default() -> Self {
-        Self::new()
-    }
-}
-impl<T> ::std::clone::Clone for __BindgenUnionField<T> {
-    #[inline]
-    fn clone(&self) -> Self {
-        Self::new()
-    }
-}
-impl<T> ::std::marker::Copy for __BindgenUnionField<T> {}
-impl<T> ::std::fmt::Debug for __BindgenUnionField<T> {
-    fn fmt(&self, fmt: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        fmt.write_str("__BindgenUnionField")
-    }
-}
-impl<T> ::std::hash::Hash for __BindgenUnionField<T> {
-    fn hash<H: ::std::hash::Hasher>(&self, _state: &mut H) {}
-}
-impl<T> ::std::cmp::PartialEq for __BindgenUnionField<T> {
-    fn eq(&self, _other: &__BindgenUnionField<T>) -> bool {
-        true
-    }
-}
-impl<T> ::std::cmp::Eq for __BindgenUnionField<T> {}
 pub type guint8 = ::std::os::raw::c_uchar;
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct _PopplerPageRange {
-    _unused: [u8; 0],
-}
-pub type PopplerPageRange = _PopplerPageRange;
 pub const PopplerActionType_POPPLER_ACTION_UNKNOWN: PopplerActionType = 0;
 pub const PopplerActionType_POPPLER_ACTION_NONE: PopplerActionType = 1;
 pub const PopplerActionType_POPPLER_ACTION_GOTO_DEST: PopplerActionType = 2;
@@ -174,6 +126,7 @@ pub type PopplerActionRendition = _PopplerActionRendition;
 pub type PopplerActionOCGState = _PopplerActionOCGState;
 pub type PopplerActionJavascript = _PopplerActionJavascript;
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct _PopplerDest {
     pub type_: PopplerDestType,
     pub page_num: ::std::os::raw::c_int,
@@ -750,6 +703,7 @@ fn bindgen_test_layout__PopplerActionMovie() {
     );
 }
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct _PopplerActionRendition {
     pub type_: PopplerActionType,
     pub title: *mut gchar,
@@ -912,19 +866,20 @@ fn bindgen_test_layout__PopplerActionJavascript() {
     );
 }
 #[repr(C)]
-pub struct _PopplerAction {
-    pub type_: __BindgenUnionField<PopplerActionType>,
-    pub any: __BindgenUnionField<PopplerActionAny>,
-    pub goto_dest: __BindgenUnionField<PopplerActionGotoDest>,
-    pub goto_remote: __BindgenUnionField<PopplerActionGotoRemote>,
-    pub launch: __BindgenUnionField<PopplerActionLaunch>,
-    pub uri: __BindgenUnionField<PopplerActionUri>,
-    pub named: __BindgenUnionField<PopplerActionNamed>,
-    pub movie: __BindgenUnionField<PopplerActionMovie>,
-    pub rendition: __BindgenUnionField<PopplerActionRendition>,
-    pub ocg_state: __BindgenUnionField<PopplerActionOCGState>,
-    pub javascript: __BindgenUnionField<PopplerActionJavascript>,
-    pub bindgen_union_field: [u64; 4usize],
+#[derive(Copy, Clone)]
+pub union _PopplerAction {
+    pub type_: PopplerActionType,
+    pub any: PopplerActionAny,
+    pub goto_dest: PopplerActionGotoDest,
+    pub goto_remote: PopplerActionGotoRemote,
+    pub launch: PopplerActionLaunch,
+    pub uri: PopplerActionUri,
+    pub named: PopplerActionNamed,
+    pub movie: PopplerActionMovie,
+    pub rendition: PopplerActionRendition,
+    pub ocg_state: PopplerActionOCGState,
+    pub javascript: PopplerActionJavascript,
+    _bindgen_union_align: [u64; 4usize],
 }
 #[test]
 fn bindgen_test_layout__PopplerAction() {

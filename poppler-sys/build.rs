@@ -90,7 +90,11 @@ fn builder() -> bindgen::Builder {
 
     // have header depedencies be included into clang
     for incl in POPPLER_LIBRARY.include_paths.iter() {
-        builder = builder.clang_args(&["-I", incl.to_str().expect(&format!("failed to stringfy {:?}", incl))]);
+        builder = builder.clang_args(&[
+            "-I",
+            incl.to_str()
+                .expect(&format!("failed to stringfy {:?}", incl)),
+        ]);
     }
 
     // have wrapping headers be included into clang
@@ -141,7 +145,6 @@ fn gen(mut builder: bindgen::Builder, module: Modules) {
         .header(format!("build/header_wrappers/{}_wrp.h", module))
         .generate()
         .expect(&format!("Unable to generate bindings for {}", module));
-    
 
     let file_name = format!("bindings_{}.rs", module);
 
@@ -151,7 +154,7 @@ fn gen(mut builder: bindgen::Builder, module: Modules) {
     binding
         .write_to_file(out_path)
         .expect(&format!("Couldn't write bindings for {}.", module));
-    
+
     // also writes it into the binding vendoring directory
     let vend_dir = BINDINGS_VENDOR_DIR;
     let vend_path = PathBuf::from(&vend_dir).join(file_name);
@@ -168,48 +171,48 @@ lazy_static! {
         .atleast_version(POPPLER_GLIB_VERSION)
         .probe("poppler-glib")
         .expect("pkg-config could not find poppler");
-       
+
     static ref WHITELIST_TYPES: HashMap<Modules, Vec<&'static str>> = {
         let mut m = HashMap::new();
         m.insert(
             Modules::Poppler,
-            WHITELIST_POPPLER.into_iter().cloned().collect(),
+            WHITELIST_POPPLER.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerDocument,
-            WHITELIST_POPPLER_DOCUMENT.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_DOCUMENT.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerPage,
-            WHITELIST_POPPLER_PAGE.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_PAGE.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerAction,
-            WHITELIST_POPPLER_ACTION.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_ACTION.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerAnnot,
-            WHITELIST_POPPLER_ANNOT.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_ANNOT.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerAttachment,
-            WHITELIST_POPPLER_ATTACHMENT.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_ATTACHMENT.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerFormField,
-            WHITELIST_POPPLER_FORM_FIELD.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_FORM_FIELD.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerLayer,
-            WHITELIST_POPPLER_LAYER.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_LAYER.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerMedia,
-            WHITELIST_POPPLER_MEDIA.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_MEDIA.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerMovie,
-            WHITELIST_POPPLER_MOVIE.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_MOVIE.iter().cloned().collect(),
         );
         m
     };
@@ -217,7 +220,7 @@ lazy_static! {
         let mut m = HashMap::new();
         m.insert(
             Modules::Poppler,
-            WHITELIST_FUNC_POPPLER.into_iter().cloned().collect(),
+            WHITELIST_FUNC_POPPLER.iter().cloned().collect(),
         );
         m
     };
@@ -314,7 +317,13 @@ const WHITELIST_POPPLER: [&str; 73] = [
     "_PopplerTextSpan",
     "PopplerTextSpan",
 ];
-const WHITELIST_POPPLER_DOCUMENT: [&str; 2] = ["goffset", "gint64"];
+const WHITELIST_POPPLER_DOCUMENT: [&str; 4] = [
+    "goffset",
+    "gint64",
+    //
+    "_PopplerPageRange",
+    "PopplerPageRange",
+];
 const WHITELIST_POPPLER_PAGE: [&str; 10] = [
     "_PopplerPoint",
     "_PopplerRectangle",
@@ -344,4 +353,8 @@ const WHITELIST_POPPLER_LAYER: [&str; 0] = [
 const WHITELIST_POPPLER_MEDIA: [&str; 0] = [
     // empty
 ];
-const WHITELIST_POPPLER_MOVIE: [&str; 1] = ["_PopplerMovie"];
+const WHITELIST_POPPLER_MOVIE: [&str; 2] = [
+    "guint64",
+    //
+    "_PopplerMovie",
+];
