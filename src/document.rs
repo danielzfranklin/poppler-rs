@@ -31,7 +31,7 @@ impl PopplerDocument {
         data: &mut [u8],
         password: &str,
     ) -> Result<PopplerDocument, glib::error::Error> {
-        if data.len() == 0 {
+        if data.is_empty() {
             return Err(glib::error::Error::new(
                 glib::FileError::Inval,
                 "data is empty",

@@ -173,43 +173,43 @@ lazy_static! {
         let mut m = HashMap::new();
         m.insert(
             Modules::Poppler,
-            WHITELIST_POPPLER.into_iter().cloned().collect(),
+            WHITELIST_POPPLER.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerDocument,
-            WHITELIST_POPPLER_DOCUMENT.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_DOCUMENT.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerPage,
-            WHITELIST_POPPLER_PAGE.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_PAGE.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerAction,
-            WHITELIST_POPPLER_ACTION.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_ACTION.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerAnnot,
-            WHITELIST_POPPLER_ANNOT.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_ANNOT.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerAttachment,
-            WHITELIST_POPPLER_ATTACHMENT.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_ATTACHMENT.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerFormField,
-            WHITELIST_POPPLER_FORM_FIELD.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_FORM_FIELD.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerLayer,
-            WHITELIST_POPPLER_LAYER.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_LAYER.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerMedia,
-            WHITELIST_POPPLER_MEDIA.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_MEDIA.iter().cloned().collect(),
         );
         m.insert(
             Modules::PopplerMovie,
-            WHITELIST_POPPLER_MOVIE.into_iter().cloned().collect(),
+            WHITELIST_POPPLER_MOVIE.iter().cloned().collect(),
         );
         m
     };
@@ -217,7 +217,7 @@ lazy_static! {
         let mut m = HashMap::new();
         m.insert(
             Modules::Poppler,
-            WHITELIST_FUNC_POPPLER.into_iter().cloned().collect(),
+            WHITELIST_FUNC_POPPLER.iter().cloned().collect(),
         );
         m
     };

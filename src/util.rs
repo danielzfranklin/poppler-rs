@@ -1,4 +1,3 @@
-use glib;
 use glib::translate::from_glib_full;
 use glib_sys::GError;
 use std::ffi::{CString, OsString};
