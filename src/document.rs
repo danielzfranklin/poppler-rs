@@ -55,6 +55,27 @@ impl PopplerDocument {
 
         Ok(PopplerDocument(doc))
     }
+    pub fn new_from_bytes(
+        bytes: glib::Bytes,
+        password: &str,
+    ) -> Result<PopplerDocument, glib::error::Error> {
+        let pw = CString::new(password).map_err(|_| {
+            glib::error::Error::new(
+                glib::FileError::Inval,
+                "Password invalid (possibly contains NUL characters)",
+            )
+        })?;
+        use glib::translate::ToGlibPtr;
+        let doc = util::call_with_gerror(|err_ptr| unsafe {
+            sys_doc::poppler_document_new_from_bytes(
+                bytes.to_glib_full(),
+                pw.as_ptr(),
+                err_ptr,
+            )
+        })?;
+
+        Ok(PopplerDocument(doc))
+    }
     pub fn get_title(&self) -> Option<String> {
         unsafe {
             let ptr: *mut c_char = sys_doc::poppler_document_get_title(self.0);
