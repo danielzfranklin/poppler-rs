@@ -21,7 +21,7 @@ fn test1() -> Result<(), cairo::Error> {
         surface.set_size(w, h)?;
 
         ctx.save()?;
-        page.render(&ctx);
+        page.render(&ctx)?;
 
         println!("Text: {:?}", page.get_text().unwrap_or(""));
 
@@ -65,7 +65,7 @@ fn test2_from_file() -> Result<(), cairo::Error> {
     let ctx = Context::new(&mut surface)?;
 
     ctx.save()?;
-    page.render(&ctx);
+    page.render(&ctx)?;
     ctx.restore()?;
     ctx.show_page()?;
 

@@ -25,14 +25,16 @@ impl PopplerPage {
         (width, height)
     }
 
-    pub fn render(&self, ctx: &cairo::Context) {
+    pub fn render(&self, ctx: &cairo::Context) -> Result<(), cairo::Error> {
         let ctx_raw = ctx.to_raw_none();
-        unsafe { sys_pg::poppler_page_render(self.0, ctx_raw) }
+        unsafe { sys_pg::poppler_page_render(self.0, ctx_raw) };
+        ctx.status()
     }
 
-    pub fn render_for_printing(&self, ctx: &cairo::Context) {
+    pub fn render_for_printing(&self, ctx: &cairo::Context) -> Result<(), cairo::Error> {
         let ctx_raw = ctx.to_raw_none();
-        unsafe { sys_pg::poppler_page_render_for_printing(self.0, ctx_raw) }
+        unsafe { sys_pg::poppler_page_render_for_printing(self.0, ctx_raw) };
+        ctx.status()
     }
 
     pub fn get_text(&self) -> Option<&str> {
