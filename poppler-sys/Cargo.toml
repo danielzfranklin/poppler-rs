@@ -13,14 +13,11 @@ keywords = ["poppler"]
 categories = ["external-ffi-bindings"]
 build = "build.rs"
 links = "poppler-glib"
+edition = "2018"
 
 [dependencies]
-cairo-rs =  { version = "0.9.1", features = ["v1_16", "use_glib", "png", "pdf"] }
-cairo-sys-rs = { version = "0.10.0" }
-glib = { version = "0.10.3" }
-glib-sys = { version = "0.10.1" }
-gobject-sys = { version = "0.10.0" }
-gio-sys = { version = "0.10.1" }
+cairo-rs = { git = "https://github.com/gtk-rs/gtk-rs-core", features = ["v1_16"] }
+gio-sys = { git = "https://github.com/gtk-rs/gtk-rs-core" }
 gtypes = "0.2.0"
 
 [build-dependencies]

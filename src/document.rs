@@ -4,6 +4,7 @@ use poppler_sys::{poppler as sys, poppler_document as sys_doc};
 use std::ffi::CString;
 use std::os::raw::{c_char, c_int};
 use std::path;
+use cairo::glib;
 
 #[derive(Debug)]
 pub struct PopplerDocument(*mut sys::PopplerDocument);

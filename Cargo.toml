@@ -11,12 +11,9 @@ repository = "https://github.com/DMSrs/poppler-rs"
 edition = "2018"
 
 [dependencies]
+# "pdf" and "png" are test dependencies. Remove them once Cargo has support
+cairo-rs = { git = "https://github.com/gtk-rs/gtk-rs-core", features = ["v1_16", "pdf", "png"] }
 poppler-sys = { version = "0.1.0", path = "poppler-sys" }
-cairo-rs =  { version = "0.9.1", features = ["v1_16", "use_glib", "png", "pdf"] }
-cairo-sys-rs = { version = "0.10.0" }
-glib = { version = "0.10.3" }
-glib-sys = { version = "0.10.1" }
-gobject-sys = { version = "0.10.0" }
 
 [features]
 default = []

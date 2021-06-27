@@ -1,5 +1,6 @@
+use cairo::glib;
 use glib::translate::from_glib_full;
-use glib_sys::GError;
+use glib::ffi::GError;
 use std::ffi::{CString, OsString};
 use std::{fs, path, ptr};
 
