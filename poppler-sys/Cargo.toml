@@ -16,8 +16,8 @@ links = "poppler-glib"
 edition = "2018"
 
 [dependencies]
-cairo-rs = { version = "0.14", features = ["v1_16"] }
-gio-sys = { version = "0.14" }
+cairo-rs = { version = ">=0.14, <1", features = ["v1_16"] }
+gio-sys = { version = ">=0.14, <1" }
 gtypes = "0.2.0"
 
 [build-dependencies]

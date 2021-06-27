@@ -12,7 +12,7 @@ edition = "2018"
 
 [dependencies]
 # "pdf" and "png" are test dependencies. Remove them once Cargo has support
-cairo-rs = { version = "0.14", features = ["v1_16", "pdf", "png"] }
+cairo-rs = { version = ">=0.14, <1", features = ["v1_16", "pdf", "png"] }
 poppler-sys = { version = "0.1.0", path = "poppler-sys" }
 
 [features]
