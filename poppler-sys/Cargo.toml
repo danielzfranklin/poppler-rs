@@ -1,10 +1,11 @@
 [package]
 name = "poppler-sys"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
     "Marc Brinkmann <git@marcbrinkmann.de>",
     "Denys Vitali <denys@denv.it>",
-    "Thiago Machado <swfsql@gmail.com>"
+    "Thiago Machado <swfsql@gmail.com>",
+    "piegames <git@piegames.de>",
 ]
 repository = "https://github.com/DMSrs/poppler-rs"
 license = "GPL-2.0"

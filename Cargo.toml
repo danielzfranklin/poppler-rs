@@ -1,11 +1,12 @@
 [package]
 authors = [
     "Marc Brinkmann <git@marcbrinkmann.de>",
-    "Denys Vitali <denys@denv.it>"
+    "Denys Vitali <denys@denv.it>",
+    "piegames <git@piegames.de>",
 ]
 name = "poppler"
 license = "GPL-2.0"
-version = "0.3.1"
+version = "0.4.0"
 description = "Wrapper for the GPL-licensed Poppler PDF rendering library."
 repository = "https://github.com/DMSrs/poppler-rs"
 edition = "2018"
@@ -13,7 +14,7 @@ edition = "2018"
 [dependencies]
 # "pdf" and "png" are test dependencies. Remove them once Cargo has support
 cairo-rs = { version = ">=0.14, <1", features = ["v1_16", "pdf", "png"] }
-poppler-sys = { version = "0.1.0", path = "poppler-sys" }
+poppler-sys = { version = "0.2.0", path = "poppler-sys" }
 
 [features]
 default = []
