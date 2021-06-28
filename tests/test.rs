@@ -5,8 +5,8 @@ use std::{fs::File, io::Read};
 #[test]
 fn test1() -> Result<(), cairo::Error> {
     let filename = "tests/test.pdf";
-    let doc = PopplerDocument::new_from_file(filename, "").unwrap();
-    let num_pages = doc.get_n_pages();
+    let doc = PopplerDocument::from_file(filename, "").unwrap();
+    let num_pages = doc.n_pages();
 
     println!("Document has {} page(s)", num_pages);
 
@@ -15,15 +15,15 @@ fn test1() -> Result<(), cairo::Error> {
 
     // FIXME: move iterator to poppler
     for page_num in 0..num_pages {
-        let page = doc.get_page(page_num).unwrap();
-        let (w, h) = page.get_size();
+        let page = doc.page(page_num).unwrap();
+        let (w, h) = page.size();
         println!("page {} has size {}, {}", page_num, w, h);
         surface.set_size(w, h)?;
 
         ctx.save()?;
         page.render(&ctx)?;
 
-        println!("Text: {:?}", page.get_text().unwrap_or(""));
+        println!("Text: {:?}", page.text().unwrap_or(""));
 
         ctx.restore()?;
         ctx.show_page()?;
@@ -37,14 +37,14 @@ fn test1() -> Result<(), cairo::Error> {
 #[test]
 fn test2_from_file() -> Result<(), cairo::Error> {
     let path = "tests/test.pdf";
-    let doc: PopplerDocument = PopplerDocument::new_from_file(path, "upw").unwrap();
-    let num_pages = doc.get_n_pages();
-    let title = doc.get_title().unwrap();
-    let metadata = doc.get_metadata();
-    let version_string = doc.get_pdf_version_string();
-    let permissions = doc.get_permissions();
-    let page: PopplerPage = doc.get_page(0).unwrap();
-    let (w, h) = page.get_size();
+    let doc: PopplerDocument = PopplerDocument::from_file(path, "upw").unwrap();
+    let num_pages = doc.n_pages();
+    let title = doc.title().unwrap();
+    let metadata = doc.metadata();
+    let version_string = doc.pdf_version_string();
+    let permissions = doc.permissions();
+    let page: PopplerPage = doc.page(0).unwrap();
+    let (w, h) = page.size();
 
     println!(
         "Document {} has {} page(s) and is {}x{}",
@@ -73,20 +73,21 @@ fn test2_from_file() -> Result<(), cairo::Error> {
     surface.write_to_png(&mut f).expect("Unable to write PNG");
     Ok(())
 }
+
 #[test]
 fn test2_from_data() {
     let path = "tests/test.pdf";
     let mut file = File::open(path).unwrap();
     let mut data: Vec<u8> = Vec::new();
     file.read_to_end(&mut data).unwrap();
-    let doc: PopplerDocument = PopplerDocument::new_from_data(&mut data[..], "upw").unwrap();
-    let num_pages = doc.get_n_pages();
-    let title = doc.get_title().unwrap();
-    let metadata = doc.get_metadata();
-    let version_string = doc.get_pdf_version_string();
-    let permissions = doc.get_permissions();
-    let page: PopplerPage = doc.get_page(0).unwrap();
-    let (w, h) = page.get_size();
+    let doc: PopplerDocument = PopplerDocument::from_data(&mut data[..], "upw").unwrap();
+    let num_pages = doc.n_pages();
+    let title = doc.title().unwrap();
+    let metadata = doc.metadata();
+    let version_string = doc.pdf_version_string();
+    let permissions = doc.permissions();
+    let page: PopplerPage = doc.page(0).unwrap();
+    let (w, h) = page.size();
 
     println!(
         "Document {} has {} page(s) and is {}x{}",
@@ -106,5 +107,5 @@ fn test2_from_data() {
 fn test3() {
     let mut data = vec![];
 
-    assert!(PopplerDocument::new_from_data(&mut data[..], "upw").is_err());
+    assert!(PopplerDocument::from_data(&mut data[..], "upw").is_err());
 }
