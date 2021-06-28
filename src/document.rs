@@ -149,3 +149,13 @@ impl PopplerDocument {
         }
     }
 }
+
+// TODO replace Box<dyn FnMut> with an opaque type once we have existential types
+impl <'a> std::iter::IntoIterator for &'a PopplerDocument {
+    type Item = PopplerPage;
+    type IntoIter = std::iter::Map<std::ops::Range<usize>, Box<dyn FnMut(usize) -> Self::Item + 'a>>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        (0..self.n_pages()).map(Box::new(move |page| self.page(page).expect("Poppler internal error: PDF is missing a page?!")))
+    }
+}

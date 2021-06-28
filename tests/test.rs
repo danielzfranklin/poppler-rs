@@ -13,9 +13,7 @@ fn test1() -> Result<(), cairo::Error> {
     let mut surface = PdfSurface::new(420.0, 595.0, "tests/output.pdf").unwrap();
     let ctx = Context::new(&mut surface)?;
 
-    // FIXME: move iterator to poppler
-    for page_num in 0..num_pages {
-        let page = doc.page(page_num).unwrap();
+    for (page_num, page) in doc.into_iter().enumerate() {
         let (w, h) = page.size();
         println!("page {} has size {}, {}", page_num, w, h);
         surface.set_size(w, h)?;
