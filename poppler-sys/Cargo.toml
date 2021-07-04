@@ -1,10 +1,11 @@
 [package]
 name = "poppler-sys"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
     "Marc Brinkmann <git@marcbrinkmann.de>",
     "Denys Vitali <denys@denv.it>",
-    "Thiago Machado <swfsql@gmail.com>"
+    "Thiago Machado <swfsql@gmail.com>",
+    "piegames <git@piegames.de>",
 ]
 repository = "https://github.com/DMSrs/poppler-rs"
 license = "GPL-2.0"
@@ -13,14 +14,11 @@ keywords = ["poppler"]
 categories = ["external-ffi-bindings"]
 build = "build.rs"
 links = "poppler-glib"
+edition = "2018"
 
 [dependencies]
-cairo-rs = { version = "0.9.1", features = ["png", "pdf"] }
-cairo-sys-rs = "0.10.0"
-glib = "0.10.1"
-glib-sys = "0.10.0"
-gobject-sys = "0.10.0"
-gio-sys = "0.10.0"
+cairo-rs = { version = ">=0.14, <1", features = ["v1_16"] }
+gio-sys = { version = ">=0.14, <1" }
 gtypes = "0.2.0"
 
 [build-dependencies]
